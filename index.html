@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админка Бригад</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            max-width: 700px;
+            margin: auto;
+            color: #333;
+            min-height: 100vh;
+        }
+        h2 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            font-size: 1.2rem;   
+            font-weight: 700 
+        }
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .btn-add {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            width: 100%;
+        }
+        .btn-del {
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            color: white;
+            width: auto;
+        }
+        .team-title {
+            cursor: pointer;
+            background: linear-gradient(45deg, #007bff, #6610f2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        .team-title:hover {
+            background: linear-gradient(45deg, #0056b3, #5a0fc8);
+        }
+        .worker-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e9ecef;
+            padding: 5px 0;
+            transition: background-color 0.3s ease;
+        }
+        .worker-item:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            border-radius: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        #loader {
+            text-align: center;
+            color: #007bff;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Управление бригадами</h2>
+    
+    <div class="card">
+        <h3>Добавить рабочего</h3>
+        <input type="text" id="workerName" placeholder="Имя рабочего">
+        <select id="teamSelect">
+            <option value="Кладочники">Кладочники</option>          
+            <option value="Бетонщики">Бетонщики</option>
+            <option value="Разнорабочие">Разнорабочие</option>
+            <option value="Штукатуршики">Штукатуршики</option>
+            <option value="Фасадчики">Фасадчики</option>
+            <option value="Сантехники">Сантехники</option>
+            <option value="Электрики">Электрики</option>
+            <option value="Крановшик">Крановшик</option>
+            <option value="Сваршики">Сваршики</option>
+        </select>
+        <button class="btn btn-add" onclick="addWorker()">Добавить в список</button>
+    </div>
+
+    <div id="loader" class="hidden">Обработка... Подождите...</div>
+    <div id="mainContent"></div>
+
+    <script>
+        // ВСТАВЬ СВОЮ ССЫЛКУ НИЖЕ
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbzH43J3zQOPJQo4bJL4PTtC7SpWMWgFKOLpeCSKD-mqsVTQJXQEGGHtTGCF6VhGd3KFRQ/exec';
+
+        // 1. Загрузка данных из таблицы
+        async function loadData() {
+            showLoader(true);
+            try {
+                const response = await fetch(scriptUrl);
+                const data = await response.json();
+                renderTeams(data);
+            } catch (e) { alert("Ошибка загрузки данных"); }
+            showLoader(false);
+        }
+
+        // 2. Группировка по бригадам и отрисовка
+        function renderTeams(workers) {
+            const container = document.getElementById('mainContent');
+            container.innerHTML = '';
+            
+            const teams = [...new Set(workers.map(w => w.team))]; // Получаем список уникальных бригад
+
+            teams.forEach(teamName => {
+                const teamDiv = document.createElement('div');
+                teamDiv.innerHTML = `<div class="team-title" onclick="toggleTeam('${teamName}')">${teamName} ▼</div>`;
+                
+                const workersList = document.createElement('div');
+                workersList.id = teamName;
+                workersList.className = 'hidden card';
+
+                workers.filter(w => w.team === teamName).forEach(w => {
+                    workersList.innerHTML += `
+                        <div class="worker-item">
+                            <span>${w.name}</span>
+                            <button class="btn btn-del" onclick="deleteWorker(${w.id})">Удалить</button>
+                        </div>`;
+                });
+                
+                container.appendChild(teamDiv);
+                container.appendChild(workersList);
+            });
+        }
+
+        // 3. Добавление рабочего
+        async function addWorker() {
+            const name = document.getElementById('workerName').value;
+            const team = document.getElementById('teamSelect').value;
+            if (!name) return alert("Введите имя");
+
+            showLoader(true);
+            await fetch(scriptUrl, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'add', name, team })
+            });
+            document.getElementById('workerName').value = '';
+            loadData();
+        }
+
+        // 4. Удаление рабочего
+        async function deleteWorker(id) {
+            if (!confirm("Удалить рабочего?")) return;
+            showLoader(true);
+            await fetch(scriptUrl, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'delete', id })
+            });
+            loadData();
+        }
+
+        // Вспомогательные функции
+        function toggleTeam(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+
+        function showLoader(show) {
+            document.getElementById('loader').classList.toggle('hidden', !show);
+        }
+
+        // Запуск при открытии
+        loadData();
+    </script>
+</body>
+</html>
