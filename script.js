@@ -1,9 +1,13 @@
-        // Функция входа (используются переменные из config.js)
+ // ВСТАВЬ СВОЮ ССЫЛКУ НИЖЕ
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbzH43J3zQOPJQo4bJL4PTtC7SpWMWgFKOLpeCSKD-mqsVTQJXQEGGHtTGCF6VhGd3KFRQ/exec';
+
+        // Функция входа
         function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+            // Простая проверка логина и пароля (замените на свои значения)
+            if (username === 'islom' && password === 'islomps') {
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'block';
                 loadData();
@@ -16,7 +20,7 @@
         async function loadData() {
             showLoader(true);
             try {
-                const response = await fetch(SCRIPT_URL);
+                const response = await fetch(scriptUrl);
                 const data = await response.json();
                 renderTeams(data);
             } catch (e) { alert("Ошибка загрузки данных"); }
@@ -58,7 +62,7 @@
             if (!name) return alert("Введите имя");
 
             showLoader(true);
-            await fetch(SCRIPT_URL, {
+            await fetch(scriptUrl, {
                 method: 'POST',
                 body: JSON.stringify({ action: 'add', name, team })
             });
@@ -70,7 +74,7 @@
         async function deleteWorker(id) {
             if (!confirm("Удалить рабочего?")) return;
             showLoader(true);
-            await fetch(SCRIPT_URL, {
+            await fetch(scriptUrl, {
                 method: 'POST',
                 body: JSON.stringify({ action: 'delete', id })
             });
@@ -87,9 +91,5 @@
             document.getElementById('loader').classList.toggle('hidden', !show);
         }
 
-        function logout() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-        }
+        // Запуск при открытии
+        loadData();
