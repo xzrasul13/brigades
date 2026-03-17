@@ -8,27 +8,37 @@
 </head>
 <body>
 
-    <h2>Управление бригадами</h2>
-    
-    <div class="card">
-        <h3>Добавить рабочего</h3>
-        <input type="text" id="workerName" placeholder="Имя рабочего">
-        <select id="teamSelect">
-            <option value="Кладочники">Кладочники</option>          
-            <option value="Бетонщики">Бетонщики</option>
-            <option value="Разнорабочие">Разнорабочие</option>
-            <option value="Штукатуршики">Штукатуршики</option>
-            <option value="Фасадчики">Фасадчики</option>
-            <option value="Сантехники">Сантехники</option>
-            <option value="Электрики">Электрики</option>
-            <option value="Крановшик">Крановшик</option>
-            <option value="Сваршики">Сваршики</option>
-        </select>
-        <button class="btn btn-add" onclick="addWorker()">Добавить в список</button>
+    <div id="loginForm" class="login-container">
+        <h2>Вход в систему</h2>
+        <input type="text" id="username" placeholder="Логин">
+        <input type="password" id="password" placeholder="Пароль">
+        <button class="btn btn-login" onclick="login()">Войти</button>
     </div>
 
-    <div id="loader" class="hidden">Обработка... Подождите...</div>
-    <div id="mainContent"></div>
+    <div id="mainApp" style="display:none;">
+        <h2>Управление бригадами</h2>
+        <button class="btn btn-logout" onclick="logout()">Выйти</button>
+        
+        <div class="card">
+            <h3>Добавить рабочего</h3>
+            <input type="text" id="workerName" placeholder="Имя рабочего">
+            <select id="teamSelect">
+                <option value="Кладочники">Кладочники</option>          
+                <option value="Бетонщики">Бетонщики</option>
+                <option value="Разнорабочие">Разнорабочие</option>
+                <option value="Штукатуршики">Штукатуршики</option>
+                <option value="Фасадчики">Фасадчики</option>
+                <option value="Сантехники">Сантехники</option>
+                <option value="Электрики">Электрики</option>
+                <option value="Крановшик">Крановшик</option>
+                <option value="Сваршики">Сваршики</option>
+            </select>
+            <button class="btn btn-add" onclick="addWorker()">Добавить в список</button>
+        </div>
+
+        <div id="loader" class="hidden">Обработка... Подождите...</div>
+        <div id="mainContent"></div>
+    </div>
 
     <script src="script.js"></script>
 </body>

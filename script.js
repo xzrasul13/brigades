@@ -1,6 +1,21 @@
  // ВСТАВЬ СВОЮ ССЫЛКУ НИЖЕ
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbzH43J3zQOPJQo4bJL4PTtC7SpWMWgFKOLpeCSKD-mqsVTQJXQEGGHtTGCF6VhGd3KFRQ/exec';
 
+        // Функция входа
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Простая проверка логина и пароля (замените на свои значения)
+            if (username === 'islom' && password === 'islomps') {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                loadData();
+            } else {
+                alert('Неверный логин или пароль');
+            }
+        }
+
         // 1. Загрузка данных из таблицы
         async function loadData() {
             showLoader(true);
