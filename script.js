@@ -1,4 +1,4 @@
- const scriptUrl = 'https://script.google.com/macros/s/AKfycbyuHpcJAL9vMDEGWPIghra0c-hYDE1CcKpgkq5ywFrL6K-eY0elcybv5pKUXaNWtFBkfw/exec';
+ const scriptUrl = 'https://script.google.com/macros/s/AKfycbxQsUBZuODJ5zPcWW4HKeCVuGkSOIq1inpN_wHdF97ajT__HOIOfEY6mJJeNgfQ_npD/exec';
 
         // ПРОВЕРКА СЕССИИ ПРИ ЗАГРУЗКЕ
         window.onload = () => {
