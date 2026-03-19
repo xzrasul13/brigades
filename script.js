@@ -1,95 +1,113 @@
- // ВСТАВЬ СВОЮ ССЫЛКУ НИЖЕ
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbzH43J3zQOPJQo4bJL4PTtC7SpWMWgFKOLpeCSKD-mqsVTQJXQEGGHtTGCF6VhGd3KFRQ/exec';
+ const scriptUrl = 'https://script.google.com/macros/s/AKfycbyuHpcJAL9vMDEGWPIghra0c-hYDE1CcKpgkq5ywFrL6K-eY0elcybv5pKUXaNWtFBkfw/exec';
 
-        // Функция входа
+        // ПРОВЕРКА СЕССИИ ПРИ ЗАГРУЗКЕ
+        window.onload = () => {
+            if (localStorage.getItem('isLogged') === 'true') {
+                showApp();
+            }
+        };
+
         function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
             
-            // Простая проверка логина и пароля (замените на свои значения)
-            if (username === 'islom' && password === 'islomps') {
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'block';
-                loadData();
+            if (user === 'islom' && pass === 'islomps') {
+                localStorage.setItem('isLogged', 'true');
+                showApp();
             } else {
-                alert('Неверный логин или пароль');
+                alert('Неверные данные');
             }
         }
 
-        // 1. Загрузка данных из таблицы
+        function logout() {
+            localStorage.removeItem('isLogged');
+            location.reload();
+        }
+
+        function showApp() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            loadData();
+        }
+
+        // --- ЛОГИКА ДАННЫХ ---
+        let workers = [];
+
         async function loadData() {
-            showLoader(true);
+            toggleLoader(true);
             try {
-                const response = await fetch(scriptUrl);
-                const data = await response.json();
-                renderTeams(data);
-            } catch (e) { alert("Ошибка загрузки данных"); }
-            showLoader(false);
+                const res = await fetch(scriptUrl);
+                workers = await res.json();
+                render();
+            } catch (e) { console.error(e); }
+            toggleLoader(false);
         }
 
-        // 2. Группировка по бригадам и отрисовка
-        function renderTeams(workers) {
-            const container = document.getElementById('mainContent');
-            container.innerHTML = '';
-            
-            const teams = [...new Set(workers.map(w => w.team))]; // Получаем список уникальных бригад
+        function render() {
+            const cont = document.getElementById('mainContent');
+            cont.innerHTML = '';
+            const teams = [...new Set(workers.map(w => w.team))];
 
-            teams.forEach(teamName => {
-                const teamDiv = document.createElement('div');
-                teamDiv.innerHTML = `<div class="team-title" onclick="toggleTeam('${teamName}')">${teamName} ▼</div>`;
+            teams.forEach(t => {
+                const block = document.createElement('div');
+                block.className = 'team-block';
+                block.innerHTML = `<div class="team-header" onclick="toggleTeamList(this)">${t} <span>▼</span></div>`;
                 
-                const workersList = document.createElement('div');
-                workersList.id = teamName;
-                workersList.className = 'hidden card';
-
-                workers.filter(w => w.team === teamName).forEach(w => {
-                    workersList.innerHTML += `
-                        <div class="worker-item">
-                            <span>${w.name}</span>
-                            <button class="btn btn-del" onclick="deleteWorker(${w.id})">Удалить</button>
-                        </div>`;
+                const list = document.createElement('div');
+                list.className = 'hidden';
+                workers.filter(w => w.team === t).forEach(w => {
+                    const item = document.createElement('div');
+                    item.className = 'worker-item';
+                    item.innerText = w.name;
+                    item.onclick = () => openInfoModal(w);
+                    list.appendChild(item);
                 });
-                
-                container.appendChild(teamDiv);
-                container.appendChild(workersList);
+                block.appendChild(list);
+                cont.appendChild(block);
             });
         }
 
-        // 3. Добавление рабочего
-        async function addWorker() {
-            const name = document.getElementById('workerName').value;
-            const team = document.getElementById('teamSelect').value;
-            if (!name) return alert("Введите имя");
+        // --- УПРАВЛЕНИЕ ОКНАМИ ---
+        function openAddModal() {
+            document.getElementById('addModal').classList.remove('hidden');
+            document.getElementById('newDate').valueAsDate = new Date();
+        }
 
-            showLoader(true);
-            await fetch(scriptUrl, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'add', name, team })
-            });
-            document.getElementById('workerName').value = '';
+        function openInfoModal(w) {
+            document.getElementById('infoName').innerText = w.name;
+            document.getElementById('infoDate').innerText = w.date || 'Не указана';
+            document.getElementById('infoTeam').innerText = w.team;
+            document.getElementById('deleteBtn').onclick = () => deleteWorker(w.id);
+            document.getElementById('infoModal').classList.remove('hidden');
+        }
+
+        function closeModals() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
+        }
+
+        function toggleTeamList(el) {
+            el.nextSibling.classList.toggle('hidden');
+        }
+
+        // --- API ДЕЙСТВИЯ ---
+        async function saveWorker() {
+            const name = document.getElementById('newName').value;
+            const team = document.getElementById('newTeam').value;
+            const date = document.getElementById('newDate').value;
+            if(!name) return alert("Имя?");
+            
+            closeModals();
+            toggleLoader(true);
+            await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({action:'add', name, team, date}) });
             loadData();
         }
 
-        // 4. Удаление рабочего
         async function deleteWorker(id) {
-            if (!confirm("Удалить рабочего?")) return;
-            showLoader(true);
-            await fetch(scriptUrl, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'delete', id })
-            });
+            if(!confirm("Удалить?")) return;
+            closeModals();
+            toggleLoader(true);
+            await fetch(scriptUrl, { method: 'POST', body: JSON.stringify({action:'delete', id}) });
             loadData();
         }
 
-        // Вспомогательные функции
-        function toggleTeam(id) {
-            const el = document.getElementById(id);
-            el.classList.toggle('hidden');
-        }
-
-        function showLoader(show) {
-            document.getElementById('loader').classList.toggle('hidden', !show);
-        }
-
-        // Запуск при открытии
-        loadData();
+        function toggleLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }

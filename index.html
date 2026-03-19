@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Строй-Админ | Вход</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
-    <title>Админка Бригад</title>
 </head>
 <body>
 
@@ -17,14 +16,24 @@
         <button class="btn btn-login" onclick="login()">Войти</button>
     </div>
 
-    <div id="mainApp" style="display:none;">
-        <h2>Управление бригадами</h2>
-        <button class="btn btn-logout" onclick="logout()">Выйти</button>
+    <div id="mainApp" class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2> Строй-Админ</h2>
+            <button class="btn btn-logout" onclick="logout()">Выйти</button>
+        </div>
         
-        <div class="card">
-            <h3>Добавить рабочего</h3>
-            <input type="text" id="workerName" placeholder="Имя рабочего">
-            <select id="teamSelect">
+        <button class="main-add-btn" onclick="openAddModal()">+ Добавить рабочего</button>
+        <div id="mainContent"></div>
+    </div>
+
+    <div id="loader" class="hidden">Загрузка...</div>
+
+    <div id="addModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Новый сотрудник</h3>
+            <input type="text" id="newName" placeholder="Имя и Фамилия">
+            <input type="date" id="newDate">
+            <select id="newTeam">
                 <option value="Кладочники">Кладочники</option>          
                 <option value="Бетонщики">Бетонщики</option>
                 <option value="Разнорабочие">Разнорабочие</option>
@@ -35,11 +44,19 @@
                 <option value="Крановшик">Крановшик</option>
                 <option value="Сваршики">Сваршики</option>
             </select>
-            <button class="btn btn-add" onclick="addWorker()">Добавить в список</button>
+            <button class="btn btn-login" onclick="saveWorker()">Сохранить</button>
+            <button class="btn" style="background:#eee; margin-top:5px;" onclick="closeModals()">Отмена</button>
         </div>
+    </div>
 
-        <div id="loader" class="hidden">Обработка... Подождите...</div>
-        <div id="mainContent"></div>
+    <div id="infoModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="infoName" style="color:var(--primary)">Имя</h3>
+            <p>📅 <strong>Дата:</strong> <span id="infoDate"></span></p>
+            <p>👷 <strong>Бригада:</strong> <span id="infoTeam"></span></p>
+            <button id="deleteBtn" class="btn" style="background:#dc3545; color:white;">Удалить рабочего</button>
+            <button class="btn" style="background:#eee; margin-top:5px;" onclick="closeModals()">Закрыть</button>
+        </div>
     </div>
 
     <script src="script.js"></script>

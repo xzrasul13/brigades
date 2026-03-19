@@ -1,138 +1,162 @@
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            max-width: 700px;
-            margin: auto;
-            color: #333;
-            min-height: 100vh;
-        }
-        .login-container {
-            background: #000000;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            text-align: center;
-            max-width: 400px;
-            margin: 50px auto;
-        }
-        .login-container input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        h2 {
-            text-align: center;
-            color: #ababab;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            font-size: 1.2rem;   
-            font-weight: 700 
-        }
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        .btn-add {
-            background: linear-gradient(45deg, #28a745, #20c997);
-            color: white;
-            width: 100%;
-        }
-        .btn-del {
-            background: linear-gradient(45deg, #dc3545, #fd7e14);
-            color: white;
-            width: auto;
-        }
-        .btn-login {
-            background: linear-gradient(45deg, #007bff, #6610f2);
-            color: rgb(255, 255, 255);
-            width: 100%;
-        }
-        .btn-logout {
-            background: linear-gradient(45deg, #6c757d, #495057);
-            color: white;
-            margin-bottom: 20px;
-        }
-        .team-title {
-            cursor: pointer;
-            background: linear-gradient(45deg, #007bff, #6610f2);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-        }
-        .team-title:hover {
-            background: linear-gradient(45deg, #0056b3, #5a0fc8);
-        }
-        .worker-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e9ecef;
-            padding: 5px 0;
-            transition: background-color 0.3s ease;
-        }
-        .worker-item:hover {
-            background-color: rgba(0, 123, 255, 0.1);
-            border-radius: 5px;
-        }
-        .hidden {
-            display: none;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: border-color 0.3s ease;
-        }
-        input:focus, select:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-        #loader {
-            text-align: center;
-            color: #007bff;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin: 20px 0;
-        }
-        h3 {
-            color: #495057;
-            margin-bottom: 15px;
-            font-size: 1.5em;
-        }
-        .logo{
-            width: 300px;
-        }
+:root {
+  --primary: #007bff;
+  --bg: #222222;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: var(--bg);
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Стили формы логина */
+.login-container {
+  background: black;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+  margin-top: 100px;
+  animation: fadeIn 0.5s ease;
+}
+h2{
+    color: #f0f2f5;
+}
+.logo {
+  width: 80px;
+  margin-bottom: 20px;
+}
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;   
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.btn {
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  transition: 0.3s;
+}
+.btn-login {
+  background: var(--primary);
+  color: white;
+  margin-top: 10px;
+}
+.btn-logout {
+  background: #f0f2f5;
+  color: #000;
+  width: auto;
+  padding: 5px 15px;
+  font-size: 12px;
+}
+
+/* Стили приложения */
+.container {
+  width: 100%;
+  max-width: 500px;
+  display: none;
+}
+.main-add-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 12px;
+  width: 100%;
+  font-size: 16px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.team-block {
+  background: #f0f2f5;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.team-header {
+  padding: 15px;
+  background: #f0f2f5;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+}
+.worker-item {
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  background-color: #f0f2f5;
+}
+.hidden {
+  display: none !important;
+}
+
+/* Pop-up (Модальные окна) */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1000;
+}
+.modal-content {
+  background: #f0f2f5;
+  padding: 25px;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-width: 500px;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+#loader {
+  position: fixed;
+  top: 20px;
+  background: #333;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  z-index: 2000;
+}
+.logo{
+    width: 300px;   
+}
